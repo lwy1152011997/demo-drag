@@ -8,6 +8,10 @@
       <div class="site-number" style="left: 400px; top: 400px">D</div>
     </div>
   </div>
+  <div>
+    <button @click="handleJia">+</button>
+    <button @click="handleJian">-</button>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -26,6 +30,7 @@ let imgOffsetX = 0;
 let imgOffsetY = 0;
 
 let rectBefore: any;
+
 onMounted(() => {
   popup = document.querySelector(".popup");
   img = popup.querySelector("img");
@@ -47,8 +52,32 @@ onMounted(() => {
 // 缩放
 const handlePinch = (event) => {
   event.preventDefault();
-  console.log("pinch");
+  console.log("pinch", event.deltaY);
   scale *= event.deltaY > 0 ? 0.9 : 1.1;
+  scale = Math.min(Math.max(0.5, scale), 2);
+
+  img.style.transform = `translate(${imgOffsetX}px, ${imgOffsetY}px) scale(${scale})`;
+  const rectAfter = img.getBoundingClientRect();
+  const offsetX = rectAfter.left - rectBefore.left;
+  const offsetY = rectAfter.top - rectBefore.top;
+
+  siteNumbers.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale}`;
+};
+
+const handleJia = () => {
+  //   scale *= event.deltaY > 0 ? 0.9 : 1.1;
+  scale *= 1.1;
+  scale = Math.min(Math.max(0.5, scale), 2);
+
+  img.style.transform = `translate(${imgOffsetX}px, ${imgOffsetY}px) scale(${scale})`;
+  const rectAfter = img.getBoundingClientRect();
+  const offsetX = rectAfter.left - rectBefore.left;
+  const offsetY = rectAfter.top - rectBefore.top;
+
+  siteNumbers.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale}`;
+};
+const handleJian = () => {
+  scale *= 0.9;
   scale = Math.min(Math.max(0.5, scale), 2);
 
   img.style.transform = `translate(${imgOffsetX}px, ${imgOffsetY}px) scale(${scale})`;
